@@ -23,24 +23,24 @@ func main() {
 		log.Fatal("Missing YGG_SOCKET_ADDR environment variable")
 	}
 
-	yggdHandler, ok = os.LookupEnv("YGG_POSTER_HANDLER")
+	yggdHandler, ok = os.LookupEnv("YGG_FORWARDER_HANDLER")
 	if !ok {
-		log.Fatal("Missing YGG_POSTER_HANDLER environment variable")
+		log.Fatal("Missing YGG_FORWARDER_HANDLER environment variable")
 	}
 
-	postUrl, ok := os.LookupEnv("YGG_POSTER_URL")
+	postUrl, ok := os.LookupEnv("YGG_FORWARDER_URL")
 	if !ok {
-		log.Fatal("Missing YGG_POSTER_URL environment variable")
+		log.Fatal("Missing YGG_FORWARDER_URL environment variable")
 	}
 
-	postUser, ok := os.LookupEnv("YGG_POSTER_USER")
+	postUser, ok := os.LookupEnv("YGG_FORWARDER_USER")
 	if !ok {
-		log.Fatal("Missing YGG_POSTER_USER environment variable")
+		log.Fatal("Missing YGG_FORWARDER_USER environment variable")
 	}
 
-	postPassword, ok := os.LookupEnv("YGG_POSTER_PASSWORD")
+	postPassword, ok := os.LookupEnv("YGG_FORWARDER_PASSWORD")
 	if !ok {
-		log.Fatal("Missing YGG_POSTER_PASSWORD environment variable")
+		log.Fatal("Missing YGG_FORWARDER_PASSWORD environment variable")
 	}
 
 	// Dial the dispatcher on its well-known address.
@@ -72,7 +72,7 @@ func main() {
 
 	// Register as a Worker service with gRPC and start accepting connections.
 	s := grpc.NewServer()
-	pb.RegisterWorkerServer(s, &posterServer{Url: postUrl, Username: postUser, Password: postPassword})
+	pb.RegisterWorkerServer(s, &forwarderServer{Url: postUrl, Username: postUser, Password: postPassword})
 	if err := s.Serve(l); err != nil {
 		log.Fatal(err)
 	}
