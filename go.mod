@@ -1,4 +1,4 @@
-module github.com/shimshtein/ygg-forwarder-worker
+module github.com/shimshtein/yggdrasil-worker-forwarder
 
 go 1.17
 
