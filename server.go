@@ -24,10 +24,10 @@ type forwarderServer struct {
 }
 
 type httpMessage struct {
-	ResponseTo string
-	Metadata   map[string]string
-	Content    []byte
-	Directive  string
+	ResponseTo string            `json:"response_to"`
+	Metadata   map[string]string `json:"metadata"`
+	Content    []byte            `json:"content"`
+	Directive  string            `json:"directive"`
 }
 
 // Send implements the "Send" method of the Worker gRPC service.
