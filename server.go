@@ -12,11 +12,11 @@ import (
 	"google.golang.org/grpc"
 )
 
-// posterServer implements the Worker gRPC service as defined by the yggdrasil
+// forwarderServer implements the Worker gRPC service as defined by the yggdrasil
 // gRPC protocol. It accepts Assignment messages, unmarshals the data into a
 // string, and echoes the content back to the Dispatch service by calling the
 // "Finish" method.
-type posterServer struct {
+type forwarderServer struct {
 	pb.UnimplementedWorkerServer
 	Url      string
 	Username string
@@ -31,7 +31,7 @@ type httpMessage struct {
 }
 
 // Send implements the "Send" method of the Worker gRPC service.
-func (s *posterServer) Send(ctx context.Context, d *pb.Data) (*pb.Receipt, error) {
+func (s *forwarderServer) Send(ctx context.Context, d *pb.Data) (*pb.Receipt, error) {
 	go func() {
 		log.Tracef("received data: %#v", d)
 

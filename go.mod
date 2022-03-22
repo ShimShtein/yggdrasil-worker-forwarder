@@ -1,4 +1,4 @@
-module github.com/shimshtein/ygg-poster-worker
+module github.com/shimshtein/ygg-forwarder-worker
 
 go 1.17
 
