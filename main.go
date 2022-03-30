@@ -23,24 +23,24 @@ func main() {
 		log.Fatal("Missing YGG_SOCKET_ADDR environment variable")
 	}
 
-	yggdHandler, ok = os.LookupEnv("YGG_FORWARDER_HANDLER")
+	yggdHandler, ok = os.LookupEnv("FORWARDER_HANDLER")
 	if !ok {
-		log.Fatal("Missing YGG_FORWARDER_HANDLER environment variable")
+		log.Fatal("Missing FORWARDER_HANDLER environment variable")
 	}
 
-	postUrl, ok := os.LookupEnv("YGG_FORWARDER_URL")
+	postUrl, ok := os.LookupEnv("FORWARDER_URL")
 	if !ok {
-		log.Fatal("Missing YGG_FORWARDER_URL environment variable")
+		log.Fatal("Missing FORWARDER_URL environment variable")
 	}
 
-	postUser, ok := os.LookupEnv("YGG_FORWARDER_USER")
+	postUser, ok := os.LookupEnv("FORWARDER_USER")
 	if !ok {
-		log.Fatal("Missing YGG_FORWARDER_USER environment variable")
+		log.Fatal("Missing FORWARDER_USER environment variable")
 	}
 
-	postPassword, ok := os.LookupEnv("YGG_FORWARDER_PASSWORD")
+	postPassword, ok := os.LookupEnv("FORWARDER_PASSWORD")
 	if !ok {
-		log.Fatal("Missing YGG_FORWARDER_PASSWORD environment variable")
+		log.Fatal("Missing FORWARDER_PASSWORD environment variable")
 	}
 
 	// Dial the dispatcher on its well-known address.
