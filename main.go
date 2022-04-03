@@ -5,9 +5,11 @@ import (
 	"net"
 	"os"
 	"time"
+	"fmt"
+	"strings"
 
 	"git.sr.ht/~spc/go-log"
-
+	"github.com/pelletier/go-toml"
 	pb "github.com/redhatinsights/yggdrasil/protocol"
 	"google.golang.org/grpc"
 )
@@ -16,8 +18,27 @@ var yggdDispatchSocketAddr string
 var yggdHandler string
 
 func main() {
-	// Get initialization values from the environment.
 	var ok bool
+
+	configFile, ok := os.LookupEnv("CONFIG_FILE")
+	if ok {
+		config, err := toml.LoadFile(configFile)
+		if err != nil {
+			fmt.Errorf("cannot load config: %w", err)
+			return
+		}
+
+		for _, value := range config.GetArray("env").([]string) {
+			split := strings.Split(value, "=")
+			os.Setenv(split[0], split[1])
+		}
+
+		os.Setenv("FORWARDER_HANDLER", strings.TrimSuffix(filepath.Base(configFile), filepath.Ext(configFile)))
+	} else {
+		log.Debug("CONFIG_FILE not set")
+	}
+
+	// Get initialization values from the environment.
 	yggdDispatchSocketAddr, ok = os.LookupEnv("YGG_SOCKET_ADDR")
 	if !ok {
 		log.Fatal("Missing YGG_SOCKET_ADDR environment variable")
