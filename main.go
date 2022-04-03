@@ -35,7 +35,7 @@ func main() {
 
 		os.Setenv("FORWARDER_HANDLER", strings.TrimSuffix(filepath.Base(configFile), filepath.Ext(configFile)))
 	} else {
-		log.Fatal("CONFIG_FILE not set")
+		log.Debug("CONFIG_FILE not set")
 	}
 
 	// Get initialization values from the environment.
