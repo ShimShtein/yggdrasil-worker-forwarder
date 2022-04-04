@@ -5,6 +5,9 @@ on:
   push:
     tags:
         - 'v*'
+  pull_request:
+    paths:
+      - '**/.github/**/*'
 
 # workflow tasks
 jobs:
@@ -19,11 +22,16 @@ jobs:
           tagRegexGroup: 1 # Optional. Default is 1.
       - name: Checkout the repository
         uses: actions/checkout@v2
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.17.0' # The Go version to download (if necessary) and use.
+      - run: |
+          go vet .
       - name: Generate build files
         uses: thatisuday/go-cross-build@v1.1.0
         with:
             platforms: 'linux/amd64'
-            package: 'src'
+            package: '.'
             name: 'yggdrasil-worker-forwarder-${{ steps.tagName.outputs.tag }}'
             compress: 'true'
             dest: 'dist'

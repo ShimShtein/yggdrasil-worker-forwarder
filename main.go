@@ -2,11 +2,12 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"net"
 	"os"
-	"time"
-	"fmt"
+	"path/filepath"
 	"strings"
+	"time"
 
 	"git.sr.ht/~spc/go-log"
 	"github.com/pelletier/go-toml"
@@ -24,8 +25,7 @@ func main() {
 	if ok {
 		config, err := toml.LoadFile(configFile)
 		if err != nil {
-			fmt.Errorf("cannot load config: %w", err)
-			return
+			log.Fatal(fmt.Errorf("cannot load config: %w", err))
 		}
 
 		for _, value := range config.GetArray("env").([]string) {
