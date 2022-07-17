@@ -24,10 +24,10 @@ type forwarderServer struct {
 }
 
 type httpMessage struct {
-	ResponseTo string
-	Metadata   map[string]string
-	Content    []byte
-	Directive  string
+	ResponseTo string            `json:"response_to"`
+	Metadata   map[string]string `json:"metadata"`
+	Content    []byte            `json:"content"`
+	Directive  string            `json:"directive"`
 }
 
 // Send implements the "Send" method of the Worker gRPC service.
@@ -42,18 +42,7 @@ func (s *forwarderServer) Send(ctx context.Context, d *pb.Data) (*pb.Receipt, er
 		}
 		defer conn.Close()
 
-		// Create a data message to send back to the dispatcher.
-		data := httpMessage{
-			ResponseTo: d.GetMessageId(),
-			Metadata:   d.GetMetadata(),
-			Content:    d.GetContent(),
-			Directive:  d.GetDirective(),
-		}
-
-		dataJson, error := json.Marshal(data)
-		if error != nil {
-			log.Fatal(error)
-		}
+		dataJson := jsonData(d)
 		log.Infof("sending %v", dataJson)
 
 		// Call http post
@@ -77,4 +66,21 @@ func (s *forwarderServer) Send(ctx context.Context, d *pb.Data) (*pb.Receipt, er
 
 	// Respond to the start request that the work was accepted.
 	return &pb.Receipt{}, nil
+}
+
+func jsonData(d *pb.Data) []byte {
+	// Create a data message to send back to the dispatcher.
+	data := httpMessage{
+		ResponseTo: d.GetMessageId(),
+		Metadata:   d.GetMetadata(),
+		Content:    d.GetContent(),
+		Directive:  d.GetDirective(),
+	}
+
+	dataJson, error := json.Marshal(data)
+	if error != nil {
+		log.Fatal(error)
+	}
+
+	return dataJson;
 }

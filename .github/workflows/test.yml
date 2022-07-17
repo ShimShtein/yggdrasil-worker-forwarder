@@ -1,0 +1,45 @@
+name: Go
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: "Build"
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        go: ['1.15', '1.16', '1.17']
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup go
+        uses: actions/setup-go@v2
+        with:
+          go-version: ${{ matrix.go }}
+
+      - name: Go build (source)
+        run: make
+
+      - name: Go build (tests)
+        run: make test
+
+      - name: Go lint
+        run: |
+          if [ $(gofmt -l src/* | wc -l) -gt 0 ]; then
+            gofmt -d src/*
+            exit 1
+          fi
+
+      - name: Go vet
+        run: make vet
+
+  lint-code:
+    name: Lint code
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Run golangci-lint
+        uses: golangci/golangci-lint-action@v2.5.1
