@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 
 	"git.sr.ht/~spc/go-log"
 	pb "github.com/redhatinsights/yggdrasil/protocol"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 // forwarderServer implements the Worker gRPC service as defined by the yggdrasil
@@ -36,7 +37,7 @@ func (s *forwarderServer) Send(ctx context.Context, d *pb.Data) (*pb.Receipt, er
 		log.Tracef("received data: %#v", d)
 
 		// Dial the Dispatcher and call "Finish"
-		conn, err := grpc.Dial(yggdDispatchSocketAddr, grpc.WithInsecure())
+		conn, err := grpc.Dial(yggdDispatchSocketAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -59,7 +60,7 @@ func (s *forwarderServer) Send(ctx context.Context, d *pb.Data) (*pb.Receipt, er
 
 		log.Tracef("response Status: %v", response.Status)
 		log.Tracef("response Headers: %+v", response.Header)
-		body, _ := ioutil.ReadAll(response.Body)
+		body, _ := io.ReadAll(response.Body)
 		log.Tracef("response Body: %v", string(body))
 
 	}()
