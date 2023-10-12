@@ -82,5 +82,5 @@ func jsonData(d *pb.Data) []byte {
 		log.Fatal(error)
 	}
 
-	return dataJson;
+	return dataJson
 }
