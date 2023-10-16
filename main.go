@@ -13,6 +13,7 @@ import (
 	"github.com/pelletier/go-toml"
 	pb "github.com/redhatinsights/yggdrasil/protocol"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 var yggdDispatchSocketAddr string
@@ -65,7 +66,7 @@ func main() {
 	}
 
 	// Dial the dispatcher on its well-known address.
-	conn, err := grpc.Dial(yggdDispatchSocketAddr, grpc.WithInsecure())
+	conn, err := grpc.Dial(yggdDispatchSocketAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		log.Fatal(err)
 	}
