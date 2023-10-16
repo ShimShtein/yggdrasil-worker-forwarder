@@ -28,7 +28,7 @@ jobs:
       # - run: |
       #     go vet .
       - name: Generate build files
-        uses: thatisuday/go-cross-build@v1.1.0
+        uses: adamruzicka/go-cross-build@1.19-alpine3.18
         with:
             platforms: 'linux/amd64'
             package: '.'
